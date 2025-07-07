@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Insider Threat Monitoring Dashboard</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, select, button { margin-bottom: 10px; width: 300px; padding: 8px; display: block; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .danger { background-color: #ffe5e5; }
+  </style>
+</head>
+<body>
+
+  <h2> Insider Threat Activity Form</h2>
+  <form id="threatForm">
+    <input type="text" id="user_id" placeholder="User ID (e.g. U003)" required>
+    <select id="role">
+      <option value="intern">Intern</option>
+      <option value="analyst">Analyst</option>
+      <option value="sysadmin">Sysadmin</option>
+    </select>
+    <input type="text" id="resource" placeholder="Resource (e.g. /secure/data)" required>
+    <input type="text" id="action" placeholder="Action (e.g. download)" required>
+    <input type="datetime-local" id="timestamp" required>
+    <input type="number" id="current_hour" placeholder="Current Hour (0-23)" required>
+    <button type="submit">Analyze</button>
+  </form>
+
+  <h3> Threat Detection Results</h3>
+  <table id="resultsTable">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Role</th>
+        <th>Action</th>
+        <th>Resource</th>
+        <th>Access Violation</th>
+        <th>Unusual Behavior</th>
+        <th>ISF Anomaly</th>
+        <th>Final Risk</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const table = document.getElementById("resultsTable").getElementsByTagName('tbody')[0];
+
+    document.getElementById("threatForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const data = {
+        logs: [{
+          user_id: document.getElementById("user_id").value,
+          role: document.getElementById("role").value,
+          resource: document.getElementById("resource").value,
+          action: document.getElementById("action").value,
+          timestamp: document.getElementById("timestamp").value,
+          current_hour: parseInt(document.getElementById("current_hour").value)
+        }]
+      };
+
+      const response = await fetch("http://127.0.0.1:8000/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      const r = result[0];
+
+      const row = table.insertRow();
+      if (r.final_risk) row.classList.add("danger");
+
+      row.insertCell(0).textContent = r.user_id;
+      row.insertCell(1).textContent = r.role;
+      row.insertCell(2).textContent = r.action;
+      row.insertCell(3).textContent = r.resource;
+      row.insertCell(4).textContent = r.access_violation;
+      row.insertCell(5).textContent = r.unusual_behavior;
+      row.insertCell(6).textContent = r.isf_anomaly;
+      row.insertCell(7).textContent = r.final_risk;
+    });
+  </script>
+</body>
+</html>
