@@ -32,3 +32,7 @@ Auto-alert security officers
 
 this is the image of output of anomalies-
 <img width="451" alt="image" src="https://github.com/user-attachments/assets/b95b982c-6828-41da-a2fc-ebd4c0901e69" />
+
+this is the table for all the users in the department with there status-
+<img width="620" alt="image" src="https://github.com/user-attachments/assets/cf7bd345-cdd8-46fd-9d94-8d1df8cd1fcd" />
+
