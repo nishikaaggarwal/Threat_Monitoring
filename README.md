@@ -29,3 +29,6 @@ Use real-time logs (SIEM tools, ELK, etc.)
 Add user authentication + session tracking
 Store threats to a secure backend
 Auto-alert security officers
+
+this is the image of output of anomalies-
+<img width="451" alt="image" src="https://github.com/user-attachments/assets/b95b982c-6828-41da-a2fc-ebd4c0901e69" />
